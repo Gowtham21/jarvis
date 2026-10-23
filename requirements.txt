@@ -1,0 +1,6 @@
+anthropic>=1.17,<2
+pydantic-settings>=2.5
+python-dotenv>=1.0
+SpeechRecognition>=3.14
+PyAudio>=0.2.14
+pyttsx3>=2.90

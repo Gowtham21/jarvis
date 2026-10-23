@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jarvis-assistant"
+version = "2.0.0"
+description = "Voice assistant powered by Claude with tool use, wake word, and pluggable speech engines"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "anthropic>=1.17,<2",
+    "pydantic-settings>=2.5",
+    "python-dotenv>=1.0",
+    "SpeechRecognition>=3.14",
+    "PyAudio>=0.2.14",
+    "pyttsx3>=2.90",
+]
+
+[project.optional-dependencies]
+whisper = ["faster-whisper>=1.1"]
+neural-tts = ["edge-tts>=7.0", "sounddevice>=0.5", "soundfile>=0.12"]
+# torch is pinned below 2.9: from 2.9 coqui-tts needs torchcodec, which on Windows
+# needs separately installed FFmpeg DLLs. With 2.8 WAV reading goes through soundfile.
+clone = ["coqui-tts>=0.27", "torch>=2.2,<2.9", "torchaudio>=2.2,<2.9", "sounddevice>=0.5", "soundfile>=0.12"]
+# IndicF5 (Indian languages incl. Tamil). The model package itself is installed from GitHub
+# without its over-strict pins:  pip install --no-deps git+https://github.com/ai4bharat/IndicF5.git
+indic = [
+    "torch>=2.2,<2.9", "torchaudio>=2.2,<2.9", "transformers>=4.40", "huggingface-hub",
+    "cached_path", "ema_pytorch>=0.5.2", "hydra-core>=1.3.0", "jieba", "librosa", "pydub",
+    "pypinyin", "torchdiffeq", "vocos", "x_transformers>=1.31.14", "tomli", "accelerate",
+    "datasets", "wandb", "transformers_stream_generator", "sounddevice>=0.5", "soundfile>=0.12",
+]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+jarvis = "jarvis.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["jarvis*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

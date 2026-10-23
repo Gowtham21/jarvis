@@ -1,0 +1,23 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# whisper model cache / temp audio
+*.mp3
+*.wav
+.cache/
+
+# editors
+.vscode/
+.idea/
+
+# collected voice samples (personal data, never commit)
+voice_profile/
