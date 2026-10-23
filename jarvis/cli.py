@@ -216,8 +216,19 @@ def main(argv: list[str] | None = None) -> int:
     else:
         from jarvis.speech import Listener, Speaker
 
-        speaker = Speaker(settings, profile)
-        listener = Listener(settings, profile if settings.collect_voice else None)
+        try:
+            speaker = Speaker(settings, profile)
+            listener = Listener(settings, profile if settings.collect_voice else None)
+        except ImportError as exc:
+            extra = {"clone": "clone", "indic": "indic", "edge": "neural-tts"}.get(settings.tts, "")
+            hint = f'pip install -e ".[{extra}]"' if extra else "pip install -e ."
+            print(
+                f"JARVIS_TTS={settings.tts} needs packages that are not installed ({exc.name}).\n"
+                f"Install them with:  {hint}\n"
+                f"or set JARVIS_TTS=pyttsx3 in .env to use the standard voice.",
+                file=sys.stderr,
+            )
+            return 2
 
     try:
         return _run(args, settings, listener, speaker, wake_word, profile)
